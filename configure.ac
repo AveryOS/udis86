@@ -17,14 +17,14 @@ m4_include([m4/ax_with_python.m4])
 AC_SUBST([ACLOCAL_AMFLAGS], ["-I $ac_macro_dir \${ACLOCAL_FLAGS}"])
 
 #
-# Determine the build host; we notify automake of Windows 
-# builds, so it can pass proper parameters for building 
+# Determine the build host; we notify automake of Windows
+# builds, so it can pass proper parameters for building
 # DLLs to the linker.
 #
 AC_CANONICAL_HOST
 
 case "$host_os" in
-	mingw32* )
+	mingw* | msys* )
 		TARGET_OS=windows
 		AC_LIBTOOL_WIN32_DLL
 		;;
@@ -35,7 +35,7 @@ AM_INIT_AUTOMAKE([1.11 -Wall -Wno-portability -Wno-extra-portability -Werror for
 AM_SILENT_RULES([yes])
 
 #
-# In case we have a Windows build, we pass a 
+# In case we have a Windows build, we pass a
 # TARGET_WINDOWS conditional to automake.
 #
 AM_CONDITIONAL(TARGET_WINDOWS, test "$TARGET_OS" = windows)

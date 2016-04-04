@@ -68,7 +68,7 @@ static void gen_operand(struct ud* u, struct ud_operand* op, int syn_cast)
       opr_cast(u, op);
     }
     ud_asmprintf(u, "[");
-    if (u->pfx_seg) {
+    if (u->pfx_seg && (u->dis_mode != 64 || u->pfx_seg == UD_R_GS || u->pfx_seg == UD_R_FS)) {
       ud_asmprintf(u, "%s:", ud_reg_tab[u->pfx_seg - UD_R_AL]);
     }
     if (op->base) {
@@ -112,7 +112,7 @@ static void gen_operand(struct ud* u, struct ud_operand* op, int syn_cast)
 
   case UD_OP_CONST:
     if (syn_cast) opr_cast(u, op);
-    ud_asmprintf(u, "%d", op->lval.udword);
+    ud_asmprintf(u, "0x%x", op->lval.udword);
     break;
 
   default: return;
@@ -127,13 +127,13 @@ extern void
 ud_translate_intel(struct ud* u)
 {
   /* check if P_OSO prefix is used */
-  if (!P_OSO(u->itab_entry->prefix) && u->pfx_opr) {
+  /*if (!P_OSO(u->itab_entry->prefix) && u->pfx_opr) {
     switch (u->dis_mode) {
     case 16: ud_asmprintf(u, "o32 "); break;
     case 32:
     case 64: ud_asmprintf(u, "o16 "); break;
     }
-  }
+  }*/
 
   /* check if P_ASO prefix was used */
   if (!P_ASO(u->itab_entry->prefix) && u->pfx_adr) {
